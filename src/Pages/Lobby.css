@@ -1,0 +1,43 @@
+.LBP {
+    background-color: wheat;
+    background-image: url("/src/assets/IMG/Img1.webp");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Bt1 {
+    color: white;
+    background-color: black;
+    text-align: center;
+    width: 100px;
+    height: 60px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.xd {
+    display: inline-block;
+    position: relative;
+    font-size: 3rem;
+    color: rgb(0, 0, 0);
+    transition:  3s all ease-in-out ;
+}
+
+.xd:hover {
+    
+    color: white;
+    transform: scale(2); /* En lugar de scale: 2; */
+}
+
+.xd:hover::before {
+    opacity: 0;
+}
