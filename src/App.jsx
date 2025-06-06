@@ -1,23 +1,20 @@
-import { BrowserRouter as Router, Route, Routes, Form, BrowserRouter } from "react-router-dom";
-import Lobby from "./Pages/Lobby";
-import "./App.css"
-import Rules from "./Pages/Rules";
-import Game from "./Pages/Game";
-
-
-
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Lobby from './Pages/Lobby';
+import './App.css';
+import Rules from './Pages/Rules';
+import Game from './Pages/Game';
+import BackgroundAudio from './Components/BackgroundAudio';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <BackgroundAudio />
       <Routes>
-        <Route path="/" Component={Lobby} />
-        <Route path="/Rules" Component={Rules} />
-        <Route path="/Game" Component={Game} />
+        <Route path="/" element={<Lobby />} />
+        <Route path="/Rules" element={<Rules />} />
+        <Route path="/Game" element={<Game />} />
       </Routes>
     </BrowserRouter>
-
   );
 };
 

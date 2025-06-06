@@ -1,29 +1,52 @@
-import React from "react";
-import "./Lobby.css";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import audiofile from "/src/assets/Audio/audio1.mp3"; // ✅ Corregido
+import React, { useState } from 'react';
+import './Lobby.css';
+import { useNavigate } from 'react-router-dom';
 
 const Lobby = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [startAnimation, setStartAnimation] = useState(false);
+  const [showText, setShowText] = useState(false);
 
-  const Rules = () => {
-    navigate("/Rules");
+  const Rules = async () => {
+    setStartAnimation(true); // Inicia animaciones
+    setLoading(true);
+
+    // Mostramos el texto tras 2 segundos
+    setTimeout(() => {
+      setShowText(true);
+    }, 3300); // puedes ajustar el tiempo
+
+    // Después de todo, navegamos
+    await new Promise((res) => setTimeout(res, 10000));
+    setLoading(false);
+    navigate('/Rules');
   };
 
   return (
     <div className="LBP">
-      <h1 className="xd">Welcome to Lobby</h1>
+      <div className={`background ${startAnimation ? 'zoomed' : ''}`}></div>
+      <div className={`overlay ${startAnimation ? 'fade-out' : ''}`}></div>
 
-      <button className="Bt1" onClick={Rules}>
-        Jugar
+      {showText && (
+        <h1
+          className="animated-text "
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 700,
+            fontSize: '2.5rem',
+            letterSpacing: '0.04em',
+            color: '#bfa14a', // dorado elegante
+            textShadow: '0 2px 8px rgba(0,0,0,0.15)'
+          }}
+        >
+          Welcome to Lobby
+        </h1>
+      )}
+
+      <button className={`Bt1${startAnimation ? ' cambi' : ''}`} onClick={Rules}>
+        ⚔️
       </button>
-
-      {/* ✅ Agregar source y controles para debuggear */}
-      <audio autoPlay loop >
-        <source src={audiofile} type="audio/mp3" />
-        Tu navegador no soporta el audio.
-      </audio>
     </div>
   );
 };
