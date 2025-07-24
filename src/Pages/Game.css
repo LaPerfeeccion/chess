@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to bottom right, #f5ecd7, #e2cfa5);
+  background: linear-gradient(to bottom right, #f5ecd7, #e2d2a5);
   min-height: 100vh;
   padding: 1rem;
   font-family: "Georgia", serif;
@@ -77,4 +77,43 @@
 .black {
   color: #000000;
   text-shadow: 1px 1px 2px white;
+}
+.win-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.5s;
+}
+.win-message {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: bold;
+  background: #fdff7a;
+  padding: 2rem 3rem;
+  border-radius: 2rem;
+  box-shadow: 0 0 40px #fffd7a;
+  animation: popIn 0.7s;
+  text-align: center;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes popIn {
+  0% { transform: scale(0.7); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.piece.white {
+  color: #ffe08a !important; /* Un amarillo beish suave */
+  filter: drop-shadow(0 0 2px #000000);
+}
+
+.piece.black {
+  filter: drop-shadow(0 0 2px #8b0000);
 }

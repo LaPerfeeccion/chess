@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Chess } from "chess.js";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
+import * as Engine from "js-chess-engine";
 import "./Game.css";
 
-export default function Game() {
+export default function GameIA() {
   const [game] = useState(new Chess());
   const [position, setPosition] = useState(game.fen());
   const [selectedSq, setSelectedSq] = useState(null);
@@ -12,34 +13,16 @@ export default function Game() {
   const [statusMessage, setStatusMessage] = useState("");
   const [showWin, setShowWin] = useState(false);
   const [winner, setWinner] = useState("");
-  const [endType, setEndType] = useState(""); // Para saber el tipo de final
   const navigate = useNavigate();
 
   const updatePosition = () => {
     setPosition(game.fen());
     if (game.isCheckmate()) {
-      const isWhiteTurn = game.turn() === "w";
-      setStatusMessage(
-        isWhiteTurn
-          ? "Jaque Mate: Ha ganado Negras"
-          : "Jaque Mate: Ha ganado Blancas"
-      );
-      setWinner(isWhiteTurn ? "¡Ganaron las negras!" : "¡Ganaste!");
-      setEndType(isWhiteTurn ? "derrota" : "victoria");
+      setWinner(game.turn() === "w" ? "¡Ganaron las negras!" : "¡Ganaste!");
       setShowWin(true);
     } else if (game.isDraw()) {
-      setStatusMessage("Tablas");
       setWinner("¡Tablas!");
-      setEndType("tablas");
       setShowWin(true);
-    } else if (game.isCheck()) {
-      setStatusMessage(
-        game.turn() === "w" ? "Jaque a Blancas" : "Jaque a Negras"
-      );
-    } else {
-      setStatusMessage(
-        `Turno de ${game.turn() === "w" ? "Blancas" : "Negras"}`
-      );
     }
   };
 
@@ -48,38 +31,31 @@ export default function Game() {
     // eslint-disable-next-line
   }, []);
 
-  // IA simple: prioriza capturas cuando juega negras
+  // IA js-chess-engine juega como negras
   useEffect(() => {
     if (game.turn() === "b" && !showWin && !game.isGameOver()) {
       setTimeout(() => {
-        const moves = game.moves({ verbose: true });
-        // Busca una captura
-        const capture = moves.find(m => m.captured);
-        const move = capture ? capture.san : moves[Math.floor(Math.random() * moves.length)];
-        game.move(move);
+        const engine = new Engine.Game(game.fen());
+        const aiMove = engine.aiMove(2); // 2 = profundidad, puedes subirlo a 3 o 4 para más dificultad
+        const from = Object.keys(aiMove)[0];
+        const to = aiMove[from];
+        game.move({ from: from.toLowerCase(), to: to.toLowerCase(), promotion: "q" });
         setSelectedSq(null);
         setLegalMoves([]);
         updatePosition();
-      }, 700); // Espera 0.7s para simular "pensar"
+      }, 700);
     }
     // eslint-disable-next-line
   }, [position, showWin]);
 
   useEffect(() => {
     if (showWin) {
-      let message = "";
-      if (endType === "victoria") message = "¡Felicidades! Has ganado. Serás redirigido a los modos de juegos.";
-      else if (endType === "derrota") message = "Has perdido contra la IA. Serás redirigido a los modos de juegos.";
-      else if (endType === "tablas") message = "¡Tablas! Nadie gana. Serás redirigido a los modos de juegos.";
-      else message = "Fin de la partida. Serás redirigido a los modos de juegos.";
-
       setTimeout(() => {
-        alert(message);
         setShowWin(false);
         navigate("/modes");
-      }, 700);
+      }, 2000);
     }
-  }, [showWin, endType, navigate]);
+  }, [showWin, navigate]);
 
   const coordToSquare = (r, c) => {
     const files = "abcdefgh";

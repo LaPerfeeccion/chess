@@ -31,29 +31,25 @@ const Rules = () => {
     // Progreso animado al presionar barra espaciadora 
     if (isSpacePressed && progress < 100) {
       const interval = setInterval(() => {
-        setProgress((prev) => (prev < 100 ? prev + 0.5 : 100));
+        setProgress((prev) => (prev < 100 ? prev + 5 : 100));
       }, 20);
       return () => clearInterval(interval);
     } else if (!isSpacePressed && progress > 0) {
       const interval = setInterval(() => {
-        setProgress((prev) => (prev > 0 ? prev - 0.5 : 0));
+        setProgress((prev) => (prev > 0 ? prev - 5 : 0));
       }, 20);
       return () => clearInterval(interval);
     }
   }, [isSpacePressed, progress]);
 
   useEffect(() => {
-    // Aplica el filtro de blur y brillo a la clase .prin
-    const maxBlur = 2;
-    const minBlur = 0;
     const maxBrightness = 6;
     const minBrightness = 1;
-    const blurValue = minBlur + (progress / 100) * maxBlur;
     const brightnessValue = minBrightness + (progress / 100) * (maxBrightness - minBrightness);
     const el = document.querySelector('.prin');
     if (el) {
-      el.style.filter = `blur(${blurValue}px) brightness(${brightnessValue})`;
-      el.style.transition = "filter 0.3s";
+      el.style.filter = `brightness(${brightnessValue})`;
+      el.style.transition = "filter 6s";
     }
   }, [progress]);
 
@@ -70,7 +66,7 @@ const Rules = () => {
       <Cardp />
       <div className="rules-barra-space">
         <div className="rules-barra-progress" style={{ width: `${progress}%` }}>
-          {progress > 0 && "Presiona SPACEBAR"}
+          {progress > 0 }
         </div>
       </div>
     </div>

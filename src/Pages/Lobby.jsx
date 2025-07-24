@@ -20,7 +20,7 @@ const Lobby = () => {
     // Después de todo, navegamos
     await new Promise((res) => setTimeout(res, 10000));
     setLoading(false);
-    navigate('/Rules');
+    navigate('/modes');
   };
 
   return (
